@@ -148,11 +148,12 @@ def main(argv):
         graphite_data, graphite_lower, graphite_upper = get_hw_value(url, seconds)
         print 'Current value: %s, lower band: %s, upper band: %s' % \
                (graphite_data, graphite_lower, graphite_upper)
-        if (graphite_data > graphite_upper) or (graphite_data < graphite_lower):
-            if critupper or critlower:
-                sys.exit(STATE_CRITICAL)
-            else:
-                sys.exit(STATE_WARNING)
+        if (graphite_data > graphite_upper) and critupper:
+            sys.exit(STATE_CRITICAL)
+        elif (graphite_data < graphite_lower) and critlower:
+            sys.exit(STATE_CRITICAL)
+        elif (graphite_data > graphite_upper) or (graphite_data < graphite_lower):
+            sys.exit(STATE_WARNING)
         else:
             sys.exit(STATE_OK)
     elif diff1 or diff2:
